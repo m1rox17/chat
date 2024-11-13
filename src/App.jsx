@@ -1,12 +1,14 @@
-import { auth, provider } from "../firebase-config";
+import { auth, provider, db } from "../firebase-config";
 import { signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
 
 import { FaRegPaperPlane } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { FaGoogle } from "react-icons/fa";
 
 import Cookies from "universal-cookie";
+import { useState, useEffect } from "react";
 
 const cookies = new Cookies();
 
@@ -38,6 +40,29 @@ function SignIn() {
 }
 
 function Chat() {
+  const [newMessage, setNewMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "chat"), (snapshot) => {
+      const chatMessages = snapshot.docs.map((doc) => doc.data());
+      setMessages(chatMessages);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const addMessage = async (e) => {
+    e.preventDefault();
+    if (newMessage === "") return;
+    await addDoc(collection(db, "chat"), {
+      text: newMessage,
+      userName: auth.currentUser.displayName,
+    });
+    setNewMessage("");
+    setMessages([]);
+  };
+
   return (
     <div className="bg-[#20232B] min-h-screen">
       <header className="bg-[#1F1F1F] text-white shadow-md">
@@ -49,24 +74,30 @@ function Chat() {
         </nav>
       </header>
       <main className="p-4">
-        <div className="w-full max-w-lg mx-auto mt-6">
-          <div className="flex items-center mb-4 text-white space-x-3">
-            <MdAccountCircle size={48} />
-            <div>
-              <h1 className="text-lg font-medium">UserName</h1>
-              <h2 className="text-sm text-gray-400">Data</h2>
+        {messages.map((message, index) => (
+          <div key={index} className="w-full max-w-lg mx-auto mt-6">
+            <div className="flex items-center mb-4 text-white space-x-3">
+              <MdAccountCircle size={48} />
+              <div>
+                <h1 className="text-lg font-medium">{message.userName}</h1>
+              </div>
+            </div>
+            <div className="bg-[#B785F6] text-white rounded-xl p-5 max-w-[500px] shadow-lg">
+              {message.text}
             </div>
           </div>
-          <div className="bg-[#B785F6] text-white rounded-xl p-5 max-w-[500px] shadow-lg">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-          </div>
-        </div>
+        ))}
       </main>
-      <form className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4">
+      <form
+        onSubmit={addMessage}
+        className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4"
+      >
         <div className="relative">
           <input
             type="text"
             placeholder="Type something..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
             className="bg-[#15171C] w-full h-12 rounded-2xl border-0 py-1.5 px-5 pr-16 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-200"
           />
           <button className="absolute inset-y-1 right-5 flex items-center justify-center w-10 h-10 bg-lime-200 text-[#262626] rounded-2xl hover:bg-[#c9e89d] transition-all duration-200">
