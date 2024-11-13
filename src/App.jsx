@@ -39,6 +39,19 @@ function SignIn() {
   );
 }
 
+function SignOut() {
+  return (
+    auth.currentUser && (
+      <button
+        className="px-4 py-2 bg-lime-200 rounded-md text-black hover:bg-lime-300 transition-all duration-200"
+        onClick={() => auth.signOut()}
+      >
+        Sign Out
+      </button>
+    )
+  );
+}
+
 function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -68,9 +81,7 @@ function Chat() {
       <header className="bg-[#1F1F1F] text-white shadow-md">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
           <h1 className="text-xl font-semibold">Chat</h1>
-          <button className="px-4 py-2 bg-lime-200 rounded-md text-black hover:bg-lime-300 transition-all duration-200">
-            Sign Out
-          </button>
+          <SignOut />
         </nav>
       </header>
       <main className="p-4">
