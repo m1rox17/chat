@@ -1,8 +1,29 @@
-# React + Vite
+## 💬 Reactive Chat App (React.js + Firebase)
+### [Live demo](https://www.google.com/)
+<img src="" alt="demo"/>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p>A real-time chat application built with React.js and Firebase Firestore. Supports instant messaging, Google authentication, and a smooth user experience. ⚡🔥</p>
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* React Js
+* Firebase
+* Tailwind
+* Vite
+
+## Run Locally
+
+### 1) First Clone this project:
+
+`git clone https://github.com/ManiruzzamanAkash/react-calculator.git`
+
+### 2) Install node modules:
+
+`npm install`
+
+### 3) Run this project in browser
+
+`npm start`
+
+### 4) Build And Run this project in browser
+`npm run build`
