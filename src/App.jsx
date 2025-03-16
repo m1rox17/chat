@@ -57,24 +57,30 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const user = auth.currentUser;
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "chat"), (snapshot) => {
-      const chatMessages = snapshot.docs.map((doc) => doc.data());
-      setMessages(chatMessages);
-    });
-    return () => unsubscribe();
-  }, []);
-
   const addMessage = async (e) => {
     e.preventDefault();
-    if (newMessage === "") return;
+
+    if (newMessage.trim() === "") return;
+
     await addDoc(collection(db, "chat"), {
       text: newMessage,
       userName: auth.currentUser.displayName,
+      timestamp: new Date(),
     });
+
     setNewMessage("");
-    setMessages([]);
   };
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "chat"), (snapshot) => {
+      const chatMessages = snapshot.docs
+        .map((doc) => doc.data())
+        .sort((a, b) => a.timestamp?.toMillis() - b.timestamp?.toMillis());
+      setMessages(chatMessages);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="bg-[#20232B] h-screen flex flex-col">
