@@ -77,31 +77,31 @@ function Chat() {
   };
 
   return (
-    <div className="bg-[#20232B] min-h-screen">
-      <header className="bg-[#1F1F1F] text-white shadow-md">
+    <div className="bg-[#20232B] h-screen flex flex-col">
+      <header className="bg-[#1F1F1F] text-white shadow-md w-full fixed">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
           <h1 className="text-xl font-semibold">Chat</h1>
           <SignOut />
         </nav>
       </header>
-      <main className="p-4">
+
+      <main className="flex-1 overflow-y-scroll  my-[10vh] p-8 mt-16 space-y-4">
         {messages.map((message, index) => (
-          <div key={index} className="w-full max-w-lg mx-auto mt-6">
-            <div className="flex items-center mb-4 text-white space-x-3">
+          <div key={index} className="w-full max-w-lg mx-auto">
+            <div className="flex items-center mb-2 text-white space-x-3">
               <MdAccountCircle size={48} />
-              <div>
-                <h1 className="text-lg font-medium">{message.userName}</h1>
-              </div>
+              <h1 className="text-lg font-medium">{message.userName}</h1>
             </div>
-            <div className="bg-[#B785F6] text-white rounded-xl p-5 max-w-[500px] shadow-lg">
+            <div className="bg-[#B785F6] text-white rounded-xl p-4 shadow-lg">
               {message.text}
             </div>
           </div>
         ))}
       </main>
+
       <form
         onSubmit={addMessage}
-        className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4"
+        className="bg-[#20232B] p-4 w-full max-w-lg mx-auto fixed bottom-0 left-1/2 transform -translate-x-1/2"
       >
         <div className="relative">
           <input
